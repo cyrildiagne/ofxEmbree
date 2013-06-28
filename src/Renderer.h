@@ -32,21 +32,36 @@ namespace ofxEmbree {
         void draw(int x, int y);
         void renderGL();
         
-        void updateScene();
+        void buildScene();
         void reset();
         
         void loadScene(string filepath);
         void loadBackPlate(string filepath);
         
         void addHDRILight(string filepath, ofColor luminosity);
-        void addQuadLight(ofPoint p, ofPoint u, ofPoint v, ofColor luminosity);
+        void addQuadLight(ofPoint position, ofPoint u, ofPoint v, ofColor luminosity);
         //TODO : addAmbientLight
         //TODO : addPointLight
         //TODO : addDirectionalLight
         //TODO : addDistantLight
         //TODO : addTriangleLight
         
-        void addSphere(Material & material, ofPoint pos, float radius, int numTheta=50, int numPhi=50);
+        void addMaterial(string name, string type);
+        void updateMaterial(string name);
+        void setMaterialProp(string name, string pname, int p);
+        void setMaterialProp(string name, string pname, Vec2i p);
+        void setMaterialProp(string name, string pname, float p);
+        void setMaterialProp(string name, string pname, ofVec2f p);
+        void setMaterialProp(string name, string pname, ofVec3f p);
+        void setMaterialProp(string name, string pname, ofVec4f p);
+        
+        Handle<Device::RTShape> addSphere(string matName, ofSpherePrimitive& sphere);
+        Handle<Device::RTShape> addSphere(string matName, ofPoint pos, float radius, int numTheta=50, int numPhi=50);
+        Handle<Device::RTShape> addMesh(string matName, ofMesh & mesh);
+        Handle<Device::RTShape> addMesh(string matName, ofMesh & mesh, const ofMatrix4x4& transform);
+        Handle<Device::RTShape> addShape(string matName, Device::RTShape shape);
+        Handle<Device::RTShape> addShape(string matName, Device::RTShape shape, const ofMatrix4x4& transform);
+        Handle<Device::RTShape> addShape(string matName, Device::RTShape shape, const AffineSpace3f& transform);
         
         void setSize(int width, int height);
         void setSamplePerPixel(int spp);
@@ -59,7 +74,8 @@ namespace ofxEmbree {
         float getAccumulatedTime();
         
         Device * getDevice() { return device; }
-        const ofFbo& getFbo() { return fbo; }
+        ofFbo& getFbo() { return fbo; }
+        vector<Handle<Device::RTPrimitive> >& getPrimitives() { return prims; }
         
     protected:
         
@@ -68,6 +84,8 @@ namespace ofxEmbree {
         
         Camera * cam;
         ofFbo fbo;
+        map<string, Handle<Device::RTMaterial> > materialMap;
+        map<string, Handle<Device::RTShape> > meshMap;
         
         size_t width , height;
         
@@ -100,6 +118,8 @@ namespace ofxEmbree {
         Handle<Device::RTImage> backplate;
         Handle<Device::RTScene> render_scene;
         vector<Handle<Device::RTPrimitive> > prims;
+        
+        ofMatrix4x4 identity;
     };
     
 }

@@ -15,7 +15,7 @@ void testApp::setup() {
     renderer.setGamma(1.7);
     renderer.setSamplePerPixel(1);
     renderer.setRecursionDepth(20);
-    renderer.updateScene();
+    renderer.buildScene();
 }
 
 void testApp::update(){

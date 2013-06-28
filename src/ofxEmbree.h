@@ -27,6 +27,7 @@
 
 #include "Renderer.h"
 #include "Camera.h"
+#include "Vhandle.h"
 
 namespace ofxEmbree {
     

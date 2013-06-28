@@ -17,8 +17,8 @@ namespace ofxEmbree {
         
     public:
         
-        Material();
-        virtual ~Material();
+        Material(){};
+        virtual ~Material(){};
         
         //Device::RTMaterial embreeMat() { return material; }
         
@@ -53,6 +53,7 @@ namespace ofxEmbree {
         float horizonScatteringFallOff;
         
     protected:
+        
         
         //Device::RTMaterial material;
     };

@@ -73,9 +73,10 @@ namespace ofxEmbree {
         delete device;
     }
     
-    void Renderer::updateScene(){
+    void Renderer::buildScene(){
         
         render_scene = createScene();
+        reset();
     }
     
     void Renderer::reset(){
@@ -103,8 +104,11 @@ namespace ofxEmbree {
         void * ptr = device->rtMapFrameBuffer(frameBuffer);
         
         fbo.begin();
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        glPixelZoom(-1.0f, 1.0f);
+        glRasterPos2f((GLsizei)width-0.1, 0.1);
         glDrawPixels((GLsizei)width, (GLsizei)height, GL_RGBA, GL_FLOAT, ptr);
+        
         fbo.end();
         
         device->rtUnmapFrameBuffer(frameBuffer);
@@ -148,11 +152,23 @@ namespace ofxEmbree {
         reset();
     }
     
-    void Renderer::addSphere(Material & material, ofPoint pos, float radius, int numTheta, int numPhi){
+    Handle <Device::RTShape> Renderer::addSphere(string matName, ofSpherePrimitive & spherePr){
         
-        Device::RTMaterial mat = device->rtNewMaterial(material.type.c_str());
+        ofPoint p = spherePr.getPosition();
         
-        Device::RTShape sphere = device->rtNewShape("sphere");
+        Handle <Device::RTShape> sphere = device->rtNewShape("sphere");
+        device->rtSetFloat3(sphere, "P", p.x, p.y, p.z);
+        device->rtSetFloat1(sphere, "r", spherePr.getRadius());
+        device->rtSetInt1(sphere, "numTheta", spherePr.getResolution());
+        device->rtSetInt1(sphere, "numPhi"  , spherePr.getResolution());
+        device->rtCommit(sphere);
+        
+        return addShape(matName, sphere);
+    }
+    
+    Handle <Device::RTShape> Renderer::addSphere(string matName, ofPoint pos, float radius, int numTheta, int numPhi){
+        
+        Handle <Device::RTShape> sphere = device->rtNewShape("sphere");
         device->rtSetFloat3(sphere, "P", pos.x, pos.y, pos.z);
         //g_device->rtSetFloat3(sphere, "dPdt", dPdt.x, dPdt.y, dPdt.z);
         device->rtSetFloat1(sphere, "r", radius);
@@ -160,11 +176,79 @@ namespace ofxEmbree {
         device->rtSetInt1(sphere, "numPhi"  , numPhi);
         device->rtCommit(sphere);
         
-        AffineSpace3f transform = AffineSpace3f(one);
-        Device::RTPrimitive prim = g_device->rtNewShapePrimitive(sphere, mat, copyToArray(transform));
+        return addShape(matName, sphere);
+    }
+
+    Handle <Device::RTShape> Renderer::addMesh(string matName, ofMesh & meshPr){
+        
+        return addMesh(matName, meshPr, identity);
+    }
+    
+    Handle <Device::RTShape> Renderer::addMesh(string matName, ofMesh & meshPr, const ofMatrix4x4& transform){
+        
+        int vertsNum = meshPr.getNumVertices();
+        int vertsSize = vertsNum * sizeof(ofVec3f);
+        Device::RTData positions = g_device->rtNewData("immutable_managed", vertsSize, meshPr.getVerticesPointer());
+        
+        int normalsNum = meshPr.getNumNormals();
+        int normalsSize = normalsNum * sizeof(ofVec3f);
+        Device::RTData normals = g_device->rtNewData("immutable_managed", normalsSize, meshPr.getNormalsPointer());
+        
+        int textcoordsNum = meshPr.getNumTexCoords();
+        int textcoordsSize = textcoordsNum * sizeof(ofVec2f);
+        Device::RTData texcoords = g_device->rtNewData("immutable_managed", textcoordsSize, meshPr.getTexCoordsPointer());
+        
+        int indicesNum = meshPr.getNumIndices();
+        int indicesSize = indicesNum * sizeof(ofIndexType);
+        Device::RTData triangles = g_device->rtNewData("immutable_managed", indicesSize, meshPr.getIndexPointer());
+        
+        Handle <Device::RTShape> mesh = device->rtNewShape("trianglemesh");
+        
+        if(vertsNum) {
+            g_device->rtSetArray(mesh, "positions", "float3", positions, vertsNum, sizeof(ofVec3f), 0);
+        }
+        if(normalsNum) {
+            g_device->rtSetArray(mesh, "normals", "float3", normals, normalsNum, sizeof(ofVec3f), 0);
+        }
+        if(textcoordsNum) {
+            g_device->rtSetArray(mesh, "texcoords", "float2", texcoords, textcoordsNum, sizeof(ofVec2f), 0);
+        }
+        if(indicesNum) {
+            // TODO : figure out why once every 2/3 times this fails without the -2
+            g_device->rtSetArray(mesh, "indices", "int3", triangles, indicesNum - 2, sizeof(ofIndexType), 0);
+        }
+        
+        device->rtCommit(mesh);
+        device->rtClear(mesh);
+
+        return addShape(matName, mesh, transform);
+    }
+    
+    Handle <Device::RTShape> Renderer::addShape(string matName, Device::RTShape shape){
+        
+        return addShape(matName, shape, AffineSpace3f(one));
+    }
+    
+    Handle <Device::RTShape> Renderer::addShape(string matName, Device::RTShape shape, const ofMatrix4x4 & t){
+        
+        AffineSpace3f space = AffineSpace3f( LinearSpace3f(t(0,0), t(1,0), t(2,0),
+                                                           t(0,1), t(1,1), t(2,1),
+                                                           t(0,2), t(1,2), t(2,2)),
+                                             Vec3f(t(3,0), t(3,1), t(3,2)));
+        
+        return addShape(matName, shape, space);
+    }
+    
+    Handle <Device::RTShape> Renderer::addShape(string matName, Device::RTShape shape, const AffineSpace3f & transform){
+        
+        Handle<Device::RTMaterial> material = materialMap[matName];
+        
+        Handle<Device::RTPrimitive> prim = g_device->rtNewShapePrimitive(shape, material, copyToArray(transform));
         prims.push_back(prim);
         
-        updateScene();
+        buildScene();
+        
+        return shape;
     }
     
     
@@ -198,7 +282,64 @@ namespace ofxEmbree {
         device->rtCommit(light1);
         prims.push_back(device->rtNewLightPrimitive(light1, NULL));
     }
+
+#pragma mark - materials
     
+    void Renderer::addMaterial(string name, string type){
+        
+        materialMap[name] = g_device->rtNewMaterial(type.c_str());
+    }
+    
+    void Renderer::updateMaterial(string name){
+        if(!materialMap.count(name)) {
+            ofLog() << "ofxEmbree ERROR - material " << name << " not found";
+            return;
+        };
+        g_device->rtCommit(materialMap[name]);
+    }
+    
+    void Renderer::setMaterialProp(string name, string pname, int p){
+        if(!materialMap.count(name)) {
+            ofLog() << "ofxEmbree ERROR - material " << name << " not found";
+            return;
+        };
+        g_device->rtSetInt1(materialMap[name], pname.c_str(), p);
+    }
+    void Renderer::setMaterialProp(string name, string pname, Vec2i p){
+        if(!materialMap.count(name)) {
+            ofLog() << "ofxEmbree ERROR - material " << name << " not found";
+            return;
+        };
+        g_device->rtSetInt2(materialMap[name], pname.c_str(), p.x, p.y);
+    }
+    void Renderer::setMaterialProp(string name, string pname, float p){
+        if(!materialMap.count(name)) {
+            ofLog() << "ofxEmbree ERROR - material " << name << " not found";
+            return;
+        };
+        g_device->rtSetFloat1(materialMap[name], pname.c_str(), p);
+    }
+    void Renderer::setMaterialProp(string name, string pname, ofVec2f p){
+        if(!materialMap.count(name)) {
+            ofLog() << "ofxEmbree ERROR - material " << name << " not found";
+            return;
+        };
+        g_device->rtSetFloat2(materialMap[name], pname.c_str(), p.x, p.y);
+    }
+    void Renderer::setMaterialProp(string name, string pname, ofVec3f p){
+        if(!materialMap.count(name)) {
+            ofLog() << "ofxEmbree ERROR - material " << name << " not found";
+            return;
+        };
+        g_device->rtSetFloat3(materialMap[name], pname.c_str(), p.x, p.y, p.z);
+    }
+    void Renderer::setMaterialProp(string name, string pname, ofVec4f p){
+        if(!materialMap.count(name)) {
+            ofLog() << "ofxEmbree ERROR - material " << name << " not found";
+            return;
+        };
+        g_device->rtSetFloat4(materialMap[name], pname.c_str(), p.x, p.y, p.z, p.w);
+    }
     
 #pragma mark - properties
     
@@ -212,7 +353,11 @@ namespace ofxEmbree {
         width = width_;
         height = height_;
         frameBuffer = device->rtNewFrameBuffer("RGB_FLOAT32", width, height, 1);
+        
         fbo.allocate(width, height, GL_RGB);
+        fbo.begin();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        fbo.end();
     }
     
     void Renderer::setSamplePerPixel(int spp_){
@@ -232,7 +377,6 @@ namespace ofxEmbree {
         device->rtSetBool1(tonemapper, "vignetting", bVignetting);
         device->rtCommit(tonemapper);
     }
-    
     
 #pragma mark - internal
     
@@ -255,6 +399,7 @@ namespace ofxEmbree {
     
     Handle <Device::RTScene> Renderer::createScene(){
         Device::RTPrimitive * p = (Device::RTPrimitive *)(prims.size() == 0 ? NULL : &prims[0]);
+        ofLog() << "Renderer::createScene - creating scene with " << prims.size() << " primitives";
         return device->rtNewScene((accel + " " + tri).c_str(), p, prims.size());
     }
     

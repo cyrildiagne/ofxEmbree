@@ -47,19 +47,15 @@ namespace ofxEmbree {
 
     void Camera::mousePressed(ofMouseEventArgs& ev) {
         
-        float mouseX = ofGetWidth() - ofGetMouseX();
-        float mouseY = ofGetMouseY();
-        initMouse = ofPoint(mouseX, mouseY);
+        initMouse = ofPoint(ofGetMouseX(), ofGetMouseY());
         initLongLat = ofPoint(dlong, dlat);
         ofAddListener(ofEvents().mouseDragged, this, &Camera::mouseDragged);
     }
 
     void Camera::mouseDragged(ofMouseEventArgs& ev) {
         
-        float mouseX = ofGetWidth() - ofGetMouseX();
-        float mouseY = ofGetMouseY();
-        dlong = initLongLat.x - (mouseX - initMouse.x) * sensitivity;
-        dlat = initLongLat.y - (mouseY - initMouse.y) * sensitivity;
+        dlong = initLongLat.x - (ofGetMouseX() - initMouse.x) * sensitivity;
+        dlat = initLongLat.y - (ofGetMouseY() - initMouse.y) * sensitivity;
     }
 
     void Camera::mouseReleased(ofMouseEventArgs& ev) {

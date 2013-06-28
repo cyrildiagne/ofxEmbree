@@ -14,9 +14,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-               BuildableName = "ofxEmbreeExampleCrown.temp_caseinsensitive_rename.app"
-               BlueprintName = "ofxEmbreeExampleCrown.temp_caseinsensitive_rename"
-               ReferencedContainer = "container:ofxEmbreeExampleCrown.xcodeproj">
+               BuildableName = "ofxEmbreeCornellBox.app"
+               BlueprintName = "ofxEmbreeCornellBox"
+               ReferencedContainer = "container:ofxEmbreeCornellBox.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -25,16 +25,16 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.GDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.GDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Release">
+      buildConfiguration = "Debug">
       <Testables>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "ofxEmbreeExampleCrown.temp_caseinsensitive_rename.app"
-            BlueprintName = "ofxEmbreeExampleCrown.temp_caseinsensitive_rename"
-            ReferencedContainer = "container:ofxEmbreeExampleCrown.xcodeproj">
+            BuildableName = "ofxEmbreeCornellBox.app"
+            BlueprintName = "ofxEmbreeCornellBox"
+            ReferencedContainer = "container:ofxEmbreeCornellBox.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -43,7 +43,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.GDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
@@ -51,9 +51,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "ofxEmbreeExampleCrown.temp_caseinsensitive_rename.app"
-            BlueprintName = "ofxEmbreeExampleCrown.temp_caseinsensitive_rename"
-            ReferencedContainer = "container:ofxEmbreeExampleCrown.xcodeproj">
+            BuildableName = "ofxEmbreeCornellBox.app"
+            BlueprintName = "ofxEmbreeCornellBox"
+            ReferencedContainer = "container:ofxEmbreeCornellBox.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -63,23 +63,23 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       debugDocumentVersioning = "YES">
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "ofxEmbreeExampleCrown.temp_caseinsensitive_rename.app"
-            BlueprintName = "ofxEmbreeExampleCrown.temp_caseinsensitive_rename"
-            ReferencedContainer = "container:ofxEmbreeExampleCrown.xcodeproj">
+            BuildableName = "ofxEmbreeCornellBox.app"
+            BlueprintName = "ofxEmbreeCornellBox"
+            ReferencedContainer = "container:ofxEmbreeCornellBox.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Release">
+      buildConfiguration = "Debug">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

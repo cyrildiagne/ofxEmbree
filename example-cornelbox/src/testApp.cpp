@@ -11,7 +11,7 @@ void testApp::setup(){
 	renderer.loadScene("cornell_box.obj");
 	renderer.addQuadLight(ofPoint(213, 548.77, 227), ofPoint(130, 0, 0), ofPoint(0, 0, 105), ofColor(50, 50, 50));
 	renderer.setRecursionDepth(20);
-    renderer.updateScene();
+    renderer.buildScene();
 }
 
 void testApp::update(){

@@ -14,9 +14,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-               BuildableName = "ofxEmbreeExampleCrown.temp_caseinsensitive_rename.app"
-               BlueprintName = "ofxEmbreeExampleCrown.temp_caseinsensitive_rename"
-               ReferencedContainer = "container:ofxEmbreeExampleCrown.xcodeproj">
+               BuildableName = "ofxEmbreeCornellBox.app"
+               BlueprintName = "ofxEmbreeCornellBox"
+               ReferencedContainer = "container:ofxEmbreeCornellBox.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,9 +32,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "ofxEmbreeExampleCrown.temp_caseinsensitive_rename.app"
-            BlueprintName = "ofxEmbreeExampleCrown.temp_caseinsensitive_rename"
-            ReferencedContainer = "container:ofxEmbreeExampleCrown.xcodeproj">
+            BuildableName = "ofxEmbreeCornellBox.app"
+            BlueprintName = "ofxEmbreeCornellBox"
+            ReferencedContainer = "container:ofxEmbreeCornellBox.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -51,9 +51,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "ofxEmbreeExampleCrown.temp_caseinsensitive_rename.app"
-            BlueprintName = "ofxEmbreeExampleCrown.temp_caseinsensitive_rename"
-            ReferencedContainer = "container:ofxEmbreeExampleCrown.xcodeproj">
+            BuildableName = "ofxEmbreeCornellBox.app"
+            BlueprintName = "ofxEmbreeCornellBox"
+            ReferencedContainer = "container:ofxEmbreeCornellBox.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -69,9 +69,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "ofxEmbreeExampleCrown.temp_caseinsensitive_rename.app"
-            BlueprintName = "ofxEmbreeExampleCrown.temp_caseinsensitive_rename"
-            ReferencedContainer = "container:ofxEmbreeExampleCrown.xcodeproj">
+            BuildableName = "ofxEmbreeCornellBox.app"
+            BlueprintName = "ofxEmbreeCornellBox"
+            ReferencedContainer = "container:ofxEmbreeCornellBox.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
