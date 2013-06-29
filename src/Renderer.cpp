@@ -29,6 +29,8 @@ namespace ofxEmbree {
         resetAccumulation = false;
         accumulation = 0;
         
+        numPassesMax = 0;
+        
         lastRenderTime = accumulatedTime = 0.0f;
     }
     
@@ -82,8 +84,12 @@ namespace ofxEmbree {
     
     void Renderer::update(){
         
-        accumulation = resetAccumulation ? 0 : accumulation+1;
-        resetAccumulation = false;
+        if(resetAccumulation) {
+            accumulation = 0;
+            resetAccumulation = false;
+        }
+        
+        if(numPassesMax > 0 && accumulation >= numPassesMax) return;
         
         updateCamera();
         
@@ -92,9 +98,13 @@ namespace ofxEmbree {
         lastRenderTime = getSeconds() - t;
         accumulatedTime += lastRenderTime;
         device->rtSwapBuffers(frameBuffer);
+        
+        accumulation++;
     }
     
     void Renderer::renderGL(){
+        
+        if(numPassesMax > 0 && accumulation >= numPassesMax) return;
         
         void * ptr = device->rtMapFrameBuffer(frameBuffer);
         
@@ -209,8 +219,7 @@ namespace ofxEmbree {
             g_device->rtSetArray(mesh, "texcoords", "float2", texcoords, textcoordsNum, sizeof(ofVec2f), 0);
         }
         if(indicesNum) {
-            // TODO : figure out why once every 2/3 times this fails without the -2
-            g_device->rtSetArray(mesh, "indices", "int3", triangles, indicesNum - 2, sizeof(ofIndexType), 0);
+            g_device->rtSetArray(mesh, "indices", "int3", triangles, indicesNum / 3, 3 * sizeof(ofIndexType), 0);
         }
         
         device->rtCommit(mesh);
@@ -311,6 +320,10 @@ namespace ofxEmbree {
         bVignetting = bVignetting_;
         device->rtSetBool1(tonemapper, "vignetting", bVignetting);
         device->rtCommit(tonemapper);
+    }
+    
+    void Renderer::setMaxPasses(int numPassMax_){
+        numPassesMax = numPassMax_;
     }
     
 #pragma mark - internal

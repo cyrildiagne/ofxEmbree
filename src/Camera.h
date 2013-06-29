@@ -29,10 +29,16 @@ namespace ofxEmbree {
         
         void setDistance(float distance);
         
-        float distance;
-        
         float getRadius();
         void setRadius(float radius);
+        
+        void setLongitude(float value);
+        float getLongitude();
+        
+        void setLatitude(float value);
+        float getLatitude();
+        
+        float distance;
         
     protected:
         

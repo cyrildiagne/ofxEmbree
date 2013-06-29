@@ -21,6 +21,9 @@ void testApp::setup(){
         ofPoint p = ofPoint(ofRandom(-400, 400), ofRandom(-400, 400), ofRandom(-400, 400));
         ofPoint r = ofPoint(ofRandom(360), ofRandom(360), ofRandom(360));
         addBox(p, r);
+        
+        ofPoint pos = ofPoint(ofRandom(-300, 300), ofRandom(-300, 300), ofRandom(-300, 300));
+        addSphere(pos, ofRandom(25, 75));
     }
 }
 
@@ -45,7 +48,7 @@ void testApp::addSphere(ofPoint pos, float radius){
 void testApp::addGround(){
     
     ofPlanePrimitive * plane = new ofPlanePrimitive();
-    plane->set(1500, 1500, 20, 20);
+    plane->set(1500, 1500, 10, 10, OF_PRIMITIVE_TRIANGLES);
     plane->setPosition(0, -400, 0);
     plane->rotate(90, 1, 0, 0);
     Device::RTShape shape = renderer.addMesh(materials.white(), plane->getMesh(), plane->getGlobalTransformMatrix());

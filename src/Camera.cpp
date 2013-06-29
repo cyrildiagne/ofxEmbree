@@ -91,5 +91,17 @@ namespace ofxEmbree {
     void Camera::setRadius(float radius_) {
         radius = radius_;
     }
+    void Camera::setLongitude(float value){
+        dlong = longitude = value;
+    }
+    float Camera::getLongitude(){
+        return longitude;
+    }
+    void Camera::setLatitude(float value){
+        dlat = latitude = value;
+    }
+    float Camera::getLatitude(){
+        return latitude;
+    }
 
 }

@@ -60,6 +60,8 @@ namespace ofxEmbree {
         void setGamma(float gamma);
         void setVignetting(bool bVigneting);
         
+        void setMaxPasses(int numPassMax);
+        
         int getAccumulation();
         float getLastRenderTime();
         float getAccumulatedTime();
@@ -94,6 +96,7 @@ namespace ofxEmbree {
         // display settings
         bool resetAccumulation;
         int accumulation;
+        int numPassesMax;
         
         //stats
         float lastRenderTime;

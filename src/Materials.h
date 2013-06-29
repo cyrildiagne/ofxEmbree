@@ -52,9 +52,6 @@ namespace ofxEmbree {
         const map<string, Handle <Device::RTMaterial> > & getMap() { return materialMap; }
         
         /*
-         
-         string type;
-         
          //glass && Dielectric
          ofColor transmission;
          float etaOutside;
