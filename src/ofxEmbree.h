@@ -1,6 +1,6 @@
 //
 //  ofxEmbree.h
-//  ofxEmbreeExample
+//  ofxEmbree
 //
 //  Created by kikko_fr on 6/27/13.
 //
@@ -27,6 +27,7 @@
 
 #include "Renderer.h"
 #include "Camera.h"
+#include "Material.h"
 #include "Vhandle.h"
 
 namespace ofxEmbree {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C6114BD5177F395D00DE12B5 /* Materials.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6114BD4177F395D00DE12B5 /* Materials.cpp */; };
+		C6114BD7177F512900DE12B5 /* ofxEmbree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6114BD6177F512900DE12B5 /* ofxEmbree.cpp */; };
 		C6249F7817748E970038E994 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6249F7717748E970038E994 /* GLUT.framework */; };
 		C6249F7B177491D70038E994 /* openFrameworks.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6249F0617748E190038E994 /* openFrameworks.a */; };
 		C63124E4177B5E1A00325C08 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C63124E2177B5E1A00325C08 /* Renderer.cpp */; };
@@ -68,6 +70,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C6114BD4177F395D00DE12B5 /* Materials.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Materials.cpp; sourceTree = "<group>"; };
+		C6114BD6177F512900DE12B5 /* ofxEmbree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxEmbree.cpp; sourceTree = "<group>"; };
 		C6249F0017748E190038E994 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = "<group>"; };
 		C6249F0117748E190038E994 /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = "<group>"; };
 		C6249F7717748E970038E994 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
@@ -271,7 +275,7 @@
 		C63124F7177BAF8E00325C08 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
 		C63124F9177BB1A100325C08 /* ofxEmbree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxEmbree.h; sourceTree = "<group>"; };
 		C63124FC177C804C00325C08 /* Vhandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vhandle.h; sourceTree = "<group>"; };
-		C6312501177C8D6500325C08 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
+		C6312501177C8D6500325C08 /* Materials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Materials.h; sourceTree = "<group>"; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		E45BE9730E8CC7DD009D7055 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
@@ -837,8 +841,10 @@
 				C63124FC177C804C00325C08 /* Vhandle.h */,
 				C63124F6177BAF8E00325C08 /* Camera.cpp */,
 				C63124F7177BAF8E00325C08 /* Camera.h */,
-				C6312501177C8D6500325C08 /* Material.h */,
+				C6312501177C8D6500325C08 /* Materials.h */,
+				C6114BD4177F395D00DE12B5 /* Materials.cpp */,
 				C63124F9177BB1A100325C08 /* ofxEmbree.h */,
+				C6114BD6177F512900DE12B5 /* ofxEmbree.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -986,6 +992,8 @@
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
 				C63124E4177B5E1A00325C08 /* Renderer.cpp in Sources */,
 				C63124F8177BAF8E00325C08 /* Camera.cpp in Sources */,
+				C6114BD5177F395D00DE12B5 /* Materials.cpp in Sources */,
+				C6114BD7177F512900DE12B5 /* ofxEmbree.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

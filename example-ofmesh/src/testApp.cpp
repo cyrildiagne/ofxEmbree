@@ -5,35 +5,19 @@ void testApp::setup(){
     
 	cam.setup(ofPoint(0, 0, 0));
 	cam.setDistance(600);
-	cam.setFov(55);
+	cam.setFov(75);
     
 	renderer.setup(cam);
 	renderer.setRecursionDepth(20);
     
     renderer.addHDRILight("lines.ppm", ofColor(1.0,1.0,1.0));
     
-    renderer.addMaterial("defaultMat", "matte");
-    renderer.setMaterialProp("defaultMat", "reflectance", ofPoint(0.5, 0.5, 0.5));
-    renderer.updateMaterial("defaultMat");
-    
-    renderer.addMaterial("glassMat", "glass");
-    renderer.setMaterialProp("glassMat", "transmission", ofPoint(1, 1, 1));
-    renderer.setMaterialProp("glassMat", "etaOutside", 1.0f);
-    renderer.setMaterialProp("glassMat", "etaInside", 1.45f);
-    renderer.updateMaterial("glassMat");
-    
-    renderer.addMaterial("goldMat", "Metal");
-    renderer.setMaterialProp("goldMat", "eta", ofPoint(0.19, 0.45, 1.50));
-    renderer.setMaterialProp("goldMat", "k", ofPoint(3.06,2.40,1.88));
-    renderer.setMaterialProp("goldMat", "roughness", 0.005f);
-    renderer.updateMaterial("goldMat");
-    
     addSphere(ofPoint(50, 0, 0), 50);
     addSphereNatively(ofPoint(-50, 0, 0), 50);
     
     addGround();
     
-    for (int i=0; i<5; i++) {
+    for (int i=0; i<5; i++){
         ofPoint p = ofPoint(ofRandom(-400, 400), ofRandom(-400, 400), ofRandom(-400, 400));
         ofPoint r = ofPoint(ofRandom(360), ofRandom(360), ofRandom(360));
         addBox(p, r);
@@ -44,18 +28,27 @@ void testApp::setup(){
 
 void testApp::addSphere(ofPoint pos, float radius){
     
+    string matName = "random_"+ ofToString( materials.getMap().size() );
+    materials.add(matName, "MetallicPaint");
+    materials.setProp(matName, "eta", 1.45f);
+    materials.setProp(matName, "glitterColor", ofColor(0.5, 0.44, 0.42));
+    materials.setProp(matName, "glitterSpread", 0.01f);
+    materials.setProp(matName, "shadeColor", ofPoint(ofRandom(1.f), ofRandom(1.f), ofRandom(1.f)));
+    
     ofSpherePrimitive * sphere = new ofSpherePrimitive();
     sphere->setRadius(radius);
     sphere->setPosition(pos);
-    Device::RTShape shape = renderer.addSphere("glassMat", *sphere);
+    Device::RTShape shape = renderer.addSphere(materials.get(matName), *sphere);
     spheresMap[shape] = sphere;
 }
 
 void testApp::addGround(){
     
     ofPlanePrimitive * plane = new ofPlanePrimitive();
-    plane->set(500, 500, 20, 20);
-    Device::RTShape shape = renderer.addMesh("defaultMat", plane->getMesh());
+    plane->set(1500, 1500, 20, 20);
+    plane->setPosition(0, -400, 0);
+    plane->rotate(90, 1, 0, 0);
+    Device::RTShape shape = renderer.addMesh(materials.white(), plane->getMesh(), plane->getGlobalTransformMatrix());
     meshMap[shape] = plane;
 }
 
@@ -65,7 +58,7 @@ void testApp::addBox(ofPoint pos, ofPoint rot){
     box->set(150, 150, 150);
     box->setPosition(pos);
     box->setOrientation(rot);
-    Device::RTShape shape = renderer.addMesh("goldMat", box->getMesh(), box->getGlobalTransformMatrix());
+    Device::RTShape shape = renderer.addMesh(materials.gold(), box->getMesh(), box->getGlobalTransformMatrix());
     meshMap[shape] = box;
 }
 
@@ -77,12 +70,13 @@ void testApp::addSphereNatively(ofPoint pos, float radius){
     // retrieve the shared device
     Device * device = renderer.getDevice();
     
-    // create a material
-    Handle<Device::RTMaterial> material = device->rtNewMaterial("Metal");
-    device->rtSetFloat3(material, "eta", 0.19, 0.45, 1.50);
-    device->rtSetFloat3(material, "k", 3.06, 2.40, 1.88);
-    device->rtSetFloat1(material, "roughness", 0.005f);
-    device->rtCommit(material);
+    // create a red velvet material
+    Handle<Device::RTMaterial> material = g_device->rtNewMaterial("Velvet");
+    g_device->rtSetFloat3(material, "reflectance", 0.4, 0, 0);
+    g_device->rtSetFloat1(material, "backScattering", 0.5f);
+    g_device->rtSetFloat3(material, "horizonScatteringColor", 0.75, 0.1, 0.1);
+    g_device->rtSetFloat1(material, "horizonScatteringFallOff", 10.0f);
+    g_device->rtCommit(material);
     
     // create a sphere shape
     Handle<Device::RTShape> sphere = device->rtNewShape("sphere");

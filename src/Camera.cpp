@@ -1,6 +1,6 @@
 //
 //  Camera.cpp
-//  ofxEmbreeExample
+//  ofxEmbree
 //
 //  Created by kikko_fr on 6/27/13.
 //

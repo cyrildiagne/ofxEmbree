@@ -28,6 +28,7 @@ private:
     
     ofxEmbree::Renderer renderer;
     ofxEmbree::Camera cam;
+    ofxEmbree::Materials materials;
     
     SphereMap spheresMap;
     MeshMap meshMap;

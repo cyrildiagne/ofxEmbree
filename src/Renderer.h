@@ -6,14 +6,14 @@
 //
 //
 
-#ifndef __ofxEmbreeExample__Renderer__
-#define __ofxEmbreeExample__Renderer__
+#ifndef __ofxEmbree__Renderer__
+#define __ofxEmbree__Renderer__
 
 #include "ofMain.h"
 
 #include "ofxEmbree.h"
 #include "VHandle.h"
-#include "Material.h"
+#include "Materials.h"
 #include "Camera.h"
 
 using namespace embree;
@@ -46,22 +46,13 @@ namespace ofxEmbree {
         //TODO : addDistantLight
         //TODO : addTriangleLight
         
-        void addMaterial(string name, string type);
-        void updateMaterial(string name);
-        void setMaterialProp(string name, string pname, int p);
-        void setMaterialProp(string name, string pname, Vec2i p);
-        void setMaterialProp(string name, string pname, float p);
-        void setMaterialProp(string name, string pname, ofVec2f p);
-        void setMaterialProp(string name, string pname, ofVec3f p);
-        void setMaterialProp(string name, string pname, ofVec4f p);
-        
-        Handle<Device::RTShape> addSphere(string matName, ofSpherePrimitive& sphere);
-        Handle<Device::RTShape> addSphere(string matName, ofPoint pos, float radius, int numTheta=50, int numPhi=50);
-        Handle<Device::RTShape> addMesh(string matName, ofMesh & mesh);
-        Handle<Device::RTShape> addMesh(string matName, ofMesh & mesh, const ofMatrix4x4& transform);
-        Handle<Device::RTShape> addShape(string matName, Device::RTShape shape);
-        Handle<Device::RTShape> addShape(string matName, Device::RTShape shape, const ofMatrix4x4& transform);
-        Handle<Device::RTShape> addShape(string matName, Device::RTShape shape, const AffineSpace3f& transform);
+        Handle<Device::RTShape> addSphere(Device::RTMaterial material, ofSpherePrimitive& sphere);
+        Handle<Device::RTShape> addSphere(Device::RTMaterial material, ofPoint pos, float radius, int numTheta=50, int numPhi=50);
+        Handle<Device::RTShape> addMesh(Device::RTMaterial material, ofMesh & mesh);
+        Handle<Device::RTShape> addMesh(Device::RTMaterial material, ofMesh & mesh, const ofMatrix4x4& transform);
+        Handle<Device::RTShape> addShape(Device::RTMaterial material, Device::RTShape shape);
+        Handle<Device::RTShape> addShape(Device::RTMaterial material, Device::RTShape shape, const ofMatrix4x4& transform);
+        Handle<Device::RTShape> addShape(Device::RTMaterial material, Device::RTShape shape, const AffineSpace3f& transform);
         
         void setSize(int width, int height);
         void setSamplePerPixel(int spp);
@@ -80,11 +71,10 @@ namespace ofxEmbree {
     protected:
         
         Handle<Device::RTScene> createScene();
-        Handle<Device::RTCamera> updateCamera();
+        void updateCamera();
         
         Camera * cam;
         ofFbo fbo;
-        map<string, Handle<Device::RTMaterial> > materialMap;
         map<string, Handle<Device::RTShape> > meshMap;
         
         size_t width , height;
@@ -125,4 +115,4 @@ namespace ofxEmbree {
 }
 
 
-#endif /* defined(__ofxEmbreeExample__Renderer__) */
+#endif /* defined(__ofxEmbree__Renderer__) */

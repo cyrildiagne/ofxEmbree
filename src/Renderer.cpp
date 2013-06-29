@@ -1,6 +1,6 @@
 //
 //  Renderer.cpp
-//  RendererExample
+//  ofxEmbree
 //
 //  Created by kikko_fr on 6/26/13.
 //
@@ -10,11 +10,6 @@
 
 #include "renderers/integratorrenderer.h"
 #include "sys/sync/mutex.h"
-
-namespace embree {
-    
-    Device * g_device = NULL;
-}
 
 namespace ofxEmbree {
     
@@ -152,7 +147,7 @@ namespace ofxEmbree {
         reset();
     }
     
-    Handle <Device::RTShape> Renderer::addSphere(string matName, ofSpherePrimitive & spherePr){
+    Handle <Device::RTShape> Renderer::addSphere(Device::RTMaterial material, ofSpherePrimitive & spherePr){
         
         ofPoint p = spherePr.getPosition();
         
@@ -163,10 +158,10 @@ namespace ofxEmbree {
         device->rtSetInt1(sphere, "numPhi"  , spherePr.getResolution());
         device->rtCommit(sphere);
         
-        return addShape(matName, sphere);
+        return addShape(material, sphere);
     }
     
-    Handle <Device::RTShape> Renderer::addSphere(string matName, ofPoint pos, float radius, int numTheta, int numPhi){
+    Handle <Device::RTShape> Renderer::addSphere(Device::RTMaterial material, ofPoint pos, float radius, int numTheta, int numPhi){
         
         Handle <Device::RTShape> sphere = device->rtNewShape("sphere");
         device->rtSetFloat3(sphere, "P", pos.x, pos.y, pos.z);
@@ -176,15 +171,15 @@ namespace ofxEmbree {
         device->rtSetInt1(sphere, "numPhi"  , numPhi);
         device->rtCommit(sphere);
         
-        return addShape(matName, sphere);
+        return addShape(material, sphere);
     }
 
-    Handle <Device::RTShape> Renderer::addMesh(string matName, ofMesh & meshPr){
+    Handle <Device::RTShape> Renderer::addMesh(Device::RTMaterial material, ofMesh & meshPr){
         
-        return addMesh(matName, meshPr, identity);
+        return addMesh(material, meshPr, identity);
     }
     
-    Handle <Device::RTShape> Renderer::addMesh(string matName, ofMesh & meshPr, const ofMatrix4x4& transform){
+    Handle <Device::RTShape> Renderer::addMesh(Device::RTMaterial material, ofMesh & meshPr, const ofMatrix4x4& transform){
         
         int vertsNum = meshPr.getNumVertices();
         int vertsSize = vertsNum * sizeof(ofVec3f);
@@ -221,27 +216,25 @@ namespace ofxEmbree {
         device->rtCommit(mesh);
         device->rtClear(mesh);
 
-        return addShape(matName, mesh, transform);
+        return addShape(material, mesh, transform);
     }
     
-    Handle <Device::RTShape> Renderer::addShape(string matName, Device::RTShape shape){
+    Handle <Device::RTShape> Renderer::addShape(Device::RTMaterial material, Device::RTShape shape){
         
-        return addShape(matName, shape, AffineSpace3f(one));
+        return addShape(material, shape, AffineSpace3f(one));
     }
     
-    Handle <Device::RTShape> Renderer::addShape(string matName, Device::RTShape shape, const ofMatrix4x4 & t){
+    Handle <Device::RTShape> Renderer::addShape(Device::RTMaterial material, Device::RTShape shape, const ofMatrix4x4 & t){
         
         AffineSpace3f space = AffineSpace3f( LinearSpace3f(t(0,0), t(1,0), t(2,0),
                                                            t(0,1), t(1,1), t(2,1),
                                                            t(0,2), t(1,2), t(2,2)),
                                              Vec3f(t(3,0), t(3,1), t(3,2)));
         
-        return addShape(matName, shape, space);
+        return addShape(material, shape, space);
     }
     
-    Handle <Device::RTShape> Renderer::addShape(string matName, Device::RTShape shape, const AffineSpace3f & transform){
-        
-        Handle<Device::RTMaterial> material = materialMap[matName];
+    Handle <Device::RTShape> Renderer::addShape(Device::RTMaterial material, Device::RTShape shape, const AffineSpace3f & transform){
         
         Handle<Device::RTPrimitive> prim = g_device->rtNewShapePrimitive(shape, material, copyToArray(transform));
         prims.push_back(prim);
@@ -281,64 +274,6 @@ namespace ofxEmbree {
         device->rtSetFloat3(light1, "L",  L.r, L.g, L.b);
         device->rtCommit(light1);
         prims.push_back(device->rtNewLightPrimitive(light1, NULL));
-    }
-
-#pragma mark - materials
-    
-    void Renderer::addMaterial(string name, string type){
-        
-        materialMap[name] = g_device->rtNewMaterial(type.c_str());
-    }
-    
-    void Renderer::updateMaterial(string name){
-        if(!materialMap.count(name)) {
-            ofLog() << "ofxEmbree ERROR - material " << name << " not found";
-            return;
-        };
-        g_device->rtCommit(materialMap[name]);
-    }
-    
-    void Renderer::setMaterialProp(string name, string pname, int p){
-        if(!materialMap.count(name)) {
-            ofLog() << "ofxEmbree ERROR - material " << name << " not found";
-            return;
-        };
-        g_device->rtSetInt1(materialMap[name], pname.c_str(), p);
-    }
-    void Renderer::setMaterialProp(string name, string pname, Vec2i p){
-        if(!materialMap.count(name)) {
-            ofLog() << "ofxEmbree ERROR - material " << name << " not found";
-            return;
-        };
-        g_device->rtSetInt2(materialMap[name], pname.c_str(), p.x, p.y);
-    }
-    void Renderer::setMaterialProp(string name, string pname, float p){
-        if(!materialMap.count(name)) {
-            ofLog() << "ofxEmbree ERROR - material " << name << " not found";
-            return;
-        };
-        g_device->rtSetFloat1(materialMap[name], pname.c_str(), p);
-    }
-    void Renderer::setMaterialProp(string name, string pname, ofVec2f p){
-        if(!materialMap.count(name)) {
-            ofLog() << "ofxEmbree ERROR - material " << name << " not found";
-            return;
-        };
-        g_device->rtSetFloat2(materialMap[name], pname.c_str(), p.x, p.y);
-    }
-    void Renderer::setMaterialProp(string name, string pname, ofVec3f p){
-        if(!materialMap.count(name)) {
-            ofLog() << "ofxEmbree ERROR - material " << name << " not found";
-            return;
-        };
-        g_device->rtSetFloat3(materialMap[name], pname.c_str(), p.x, p.y, p.z);
-    }
-    void Renderer::setMaterialProp(string name, string pname, ofVec4f p){
-        if(!materialMap.count(name)) {
-            ofLog() << "ofxEmbree ERROR - material " << name << " not found";
-            return;
-        };
-        g_device->rtSetFloat4(materialMap[name], pname.c_str(), p.x, p.y, p.z, p.w);
     }
     
 #pragma mark - properties
@@ -380,7 +315,7 @@ namespace ofxEmbree {
     
 #pragma mark - internal
     
-    Handle <Device::RTCamera> Renderer::updateCamera(){
+    void Renderer::updateCamera(){
         
         Vec3f p = toEmbree(cam->getPosition());
         Vec3f t = toEmbree(cam->getTargetPos());
@@ -394,7 +329,6 @@ namespace ofxEmbree {
         device->rtSetFloat1(camera, "lensRadius", cam->getRadius());
         device->rtSetFloat1(camera, "focalDistance", (cam->getTargetPos() - cam->getPosition()).length());
         device->rtCommit(camera);
-        return camera;
     }
     
     Handle <Device::RTScene> Renderer::createScene(){

@@ -1,13 +1,13 @@
 //
 //  Camera.h
-//  ofxEmbreeExample
+//  ofxEmbree
 //
 //  Created by kikko_fr on 6/27/13.
 //
 //
 
-#ifndef __ofxEmbreeExample__Camera__
-#define __ofxEmbreeExample__Camera__
+#ifndef __ofxEmbree__Camera__
+#define __ofxEmbree__Camera__
 
 #include "ofMain.h"
 
