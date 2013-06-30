@@ -11,13 +11,26 @@
 
 namespace ofxEmbree {
     
+#define _CONST const char * Materials
+    _CONST::MATTE = "Matte";
+    _CONST::PLASTIC = "Plastic";
+    _CONST::DIELECTRIC = "Dielectric";
+    _CONST::GLASS = "Glass";
+    _CONST::THIN_DIELECTRIC = "ThinDielectric";
+    _CONST::THIN_GLASS = "ThinGlass";
+    _CONST::MIRROR = "Mirror";
+    _CONST::METAL = "Metal";
+    _CONST::METALLIC_PAINT = "MetallicPaint";
+    _CONST::MATTE_TEXTURED = "MatteTextured";
+    _CONST::OBJ = "Obj";
+    _CONST::VELVET = "Velvet";
+#undef _CONST
+    
     Device::RTMaterial Materials::get(string name){
-        
         return materialMap[name];
     }
     
     void Materials::add(string name, string type){
-        
         if(materialMap.find(name) != materialMap.end()){
             ofLog() << "ofxEmbree ERROR - material " << name << " already exists";
             return;
@@ -26,7 +39,6 @@ namespace ofxEmbree {
     }
     
     void Materials::add(string name, Device::RTMaterial mat){
-        
         if(materialMap.find(name) != materialMap.end()){
             ofLog() << "ofxEmbree ERROR - material " << name << " already exists";
             return;
@@ -103,10 +115,12 @@ namespace ofxEmbree {
     
     Device::RTMaterial Materials::gold(){
         
-        if(materialMap.find("default_gold") != materialMap.end()){
-            return materialMap["default_gold"];
+        string name = "default_gold";
+        if(materialMap.find(name) != materialMap.end()){
+            return materialMap[name];
         }
-        Handle<Device::RTMaterial> material = g_device->rtNewMaterial("Metal");
+        ofLog() << METAL;
+        Handle<Device::RTMaterial> material = g_device->rtNewMaterial( METAL );
         g_device->rtSetFloat3(material, "eta", 0.19, 0.45, 1.50);
         g_device->rtSetFloat3(material, "k", 3.06, 2.40, 1.88);
         g_device->rtSetFloat1(material, "roughness", 0.005f);
@@ -119,30 +133,52 @@ namespace ofxEmbree {
     
     Device::RTMaterial Materials::glass(){
         
-        if(materialMap.find("default_glass") != materialMap.end()){
-            return materialMap["default_glass"];
+        string name = "default_glass";
+        if(materialMap.find(name) != materialMap.end()){
+            return materialMap[name];
         }
-        Handle<Device::RTMaterial> material = g_device->rtNewMaterial("Glass");
+        Handle<Device::RTMaterial> material = g_device->rtNewMaterial( GLASS );
         g_device->rtSetFloat3(material, "transmission", 1, 1, 1);
         g_device->rtSetFloat1(material, "etaOutside", 1.0f);
         g_device->rtSetFloat1(material, "etaInside", 1.45f);
         g_device->rtCommit(material);
         
-        materialMap["default_glass"] = material;
+        materialMap[name] = material;
+        
+        return material;
+    }
+    
+    Device::RTMaterial Materials::mettalicPaint(ofColor color, bool bCache){
+        
+        string ext = ofToString(color.r) + "_" + ofToString(color.g) + "_" + ofToString(color.b);
+        string name = "default_metalpaint_ext";
+        if(materialMap.find(name) != materialMap.end()){
+            return materialMap[name];
+        }
+        
+        Handle<Device::RTMaterial> material = g_device->rtNewMaterial( METALLIC_PAINT );
+        g_device->rtSetFloat1(material, "eta", 1.45f);
+        g_device->rtSetFloat3(material, "glitterColor", 0.5, 0.44, 0.42);
+        g_device->rtSetFloat1(material, "glitterSpread", 0.01f);
+        g_device->rtSetFloat3(material, "shadeColor", color.r, color.g, color.b);
+        g_device->rtCommit(material);
+        
+        materialMap[name] = material;
         
         return material;
     }
     
     Device::RTMaterial Materials::white(){
         
-        if(materialMap.find("default_white") != materialMap.end()){
-            return materialMap["default_white"];
+        string name = "default_white";
+        if(materialMap.find(name) != materialMap.end()){
+            return materialMap[name];
         }
-        Handle<Device::RTMaterial> material = g_device->rtNewMaterial("Matte");
+        Handle<Device::RTMaterial> material = g_device->rtNewMaterial( MATTE );
         g_device->rtSetFloat3(material, "reflectance", 1.0, 1.0, 1.0);
         g_device->rtCommit(material);
         
-        materialMap["default_white"] = material;
+        materialMap[name] = material;
         
         return material;
     }

@@ -229,7 +229,6 @@ namespace ofxEmbree {
     }
     
     Handle <Device::RTShape> Renderer::addShape(Device::RTMaterial material, Device::RTShape shape){
-        
         return addShape(material, shape, AffineSpace3f(one));
     }
     

@@ -18,16 +18,27 @@ using namespace embree;
 
 namespace ofxEmbree {
     
-	//extern Device* g_device;
-    
 	class Materials {
         
     public:
         
-        Materials(){
-        }
-        virtual ~Materials(){
-        }
+#define CONST_ static const char *
+        CONST_ MATTE;
+        CONST_ PLASTIC;
+        CONST_ DIELECTRIC;
+        CONST_ GLASS;
+        CONST_ THIN_DIELECTRIC;
+        CONST_ THIN_GLASS;
+        CONST_ MIRROR;
+        CONST_ METAL;
+        CONST_ METALLIC_PAINT;
+        CONST_ MATTE_TEXTURED;
+        CONST_ OBJ;
+        CONST_ VELVET;
+#undef CONST_
+        
+        Materials(){}
+        virtual ~Materials(){}
         
         void add(string name, string type);
         void add(string name, Device::RTMaterial mat);
@@ -48,6 +59,7 @@ namespace ofxEmbree {
         Device::RTMaterial white();
         Device::RTMaterial gold();
         Device::RTMaterial glass();
+        Device::RTMaterial mettalicPaint(ofColor color, bool bCache=false);
         
         const map<string, Handle <Device::RTMaterial> > & getMap() { return materialMap; }
         
