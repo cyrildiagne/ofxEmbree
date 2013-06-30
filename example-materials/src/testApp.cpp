@@ -8,14 +8,14 @@ void testApp::setup(){
     
     ofBackground(ofColor::black);
     
-	cam.setup(ofPoint(0, 150, 0));
+	cam.setup(ofPoint(0, 150, -100));
 	cam.setDistance(800);
-	cam.setFov(65);
+	cam.setFov(60);
     cam.setLongitude(0);
     
 	renderer.setup(cam);
 	renderer.setRecursionDepth(10);
-    renderer.addQuadLight(ofPoint(-500, 600, -500), ofPoint(1000, 0, 0), ofPoint(0, 0, 1000), ofColor(2.0, 2.0, 2.0));
+    renderer.addQuadLight(ofPoint(-750, 600, -750), ofPoint(1500, 0, 0), ofPoint(0, 0, 1500), ofColor(2.0, 2.0, 2.0));
     
     addGround();
     addSquirrels();
@@ -36,11 +36,14 @@ void testApp::addGround(){
 
 void testApp::addSquirrels(){
     
-    vector<Device::RTMaterial> matlist(4);
-    matlist[0] = materials.white();
+    vector<Device::RTMaterial> matlist(7);
+    matlist[0] = materials.matte(ofFloatColor::white);
     matlist[1] = materials.glass();
     matlist[2] = materials.gold();
-    matlist[3] = materials.mettalicPaint(ofColor(1.0, 0, 0));
+    matlist[3] = materials.mirror();
+    matlist[4] = materials.mettalicPaint(ofFloatColor(0.0, 0.8, 1.0));
+    matlist[5] = materials.velvet(ofFloatColor(0.8, 0.0, 0.3));
+    matlist[6] = materials.plastic(ofFloatColor(0.3, 0.8, 0.3));
     int x = - ((int)matlist.size()-1) * 200.f * 0.5;
     for (int i=0; i<matlist.size(); i++) {
         addMesh(matlist[i], ofPoint(x+i*200, 0, 0));
@@ -84,24 +87,23 @@ void testApp::draw(){
     text = "Press ' ' to toggle render mode\n";
     text += "Press 'f' to toggle fullscreen";
     
-    if(!bEmbreeRender) {
-    
-        cam.begin();
-        ground->draw(OF_MESH_WIREFRAME);
-        for (MeshMap::iterator it = meshMap.begin(); it!=meshMap.end(); ++it) {
-            ofxAssimpModelLoader * s = it->second;
-            s->draw(OF_MESH_WIREFRAME);
-        }
-        cam.end();   
-    }
-    else {
-    
+    if(bEmbreeRender) {
+        ofSetColor(ofColor::white);
         renderer.draw(0, 0);
         
         text += "\n\nFPS : " + ofToString(ofGetFrameRate()) + "\n";
         text += "Last render time : " + ofToString(renderer.getLastRenderTime()*1000, 0) + "ms" + "\n";
         text += "Accumulated passes : " + ofToString(renderer.getAccumulation()) + "\n";
         text += "Accumulated time : " + ofToString(renderer.getAccumulatedTime(), 0) + "s";
+    } else {
+        ofSetColor(255,255,255,50);
+        cam.begin();
+        ground->draw(OF_MESH_WIREFRAME);
+        for (MeshMap::iterator it = meshMap.begin(); it!=meshMap.end(); ++it) {
+            ofxAssimpModelLoader * s = it->second;
+            s->draw(OF_MESH_WIREFRAME);
+        }
+        cam.end();
     }
     
     ofDrawBitmapStringHighlight(text, 10, 20, ofColor(0,0,0,50), ofColor::white);
@@ -114,6 +116,14 @@ void testApp::keyPressed(int key){
             break;
         case ' ':
             bEmbreeRender = !bEmbreeRender;
+            break;
+        case OF_KEY_LEFT:
+            cam.getTarget().setPosition(cam.getTargetPos().x - 50, 150, -100);
+            renderer.reset();
+            break;
+        case OF_KEY_RIGHT:
+            cam.getTarget().setPosition(cam.getTargetPos().x + 50, 150, -100);
+            renderer.reset();
             break;
         default:
             break;

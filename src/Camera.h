@@ -25,6 +25,7 @@ namespace ofxEmbree {
         void update();
         
         void setTarget(ofNode &target);
+        ofNode& getTarget();
         ofPoint getTargetPos();
         
         void setDistance(float distance);

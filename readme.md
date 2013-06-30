@@ -3,7 +3,7 @@ Integration of Intel's Embree photo-realistic raytracing engine in openFramework
 **Warning :** This addon is still in alpha state. API and functionalities are expected to change.
 
 **Materials Example :**
-![alt text](http://farm8.staticflickr.com/7361/9172687837_8d5f2d3965_b.jpg "ofxEmbree-MaterialsExample")
+![alt text](http://farm8.staticflickr.com/7405/9177154399_65f92d71a3_b.jpg "ofxEmbree-MaterialsExample")
 
 **ofMesh Example :**
 ![alt text](http://farm6.staticflickr.com/5531/9158283499_e34af1cee3_b.jpg "ofxEmbree-OFMeshesExample")

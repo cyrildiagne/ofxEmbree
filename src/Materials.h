@@ -22,20 +22,20 @@ namespace ofxEmbree {
         
     public:
         
-#define CONST_ static const char *
-        CONST_ MATTE;
-        CONST_ PLASTIC;
-        CONST_ DIELECTRIC;
-        CONST_ GLASS;
-        CONST_ THIN_DIELECTRIC;
-        CONST_ THIN_GLASS;
-        CONST_ MIRROR;
-        CONST_ METAL;
-        CONST_ METALLIC_PAINT;
-        CONST_ MATTE_TEXTURED;
-        CONST_ OBJ;
-        CONST_ VELVET;
-#undef CONST_
+#define STATIC_ static const char *
+        STATIC_ MATTE;
+        STATIC_ PLASTIC;
+        STATIC_ DIELECTRIC;
+        STATIC_ GLASS;
+        STATIC_ THIN_DIELECTRIC;
+        STATIC_ THIN_GLASS;
+        STATIC_ MIRROR;
+        STATIC_ METAL;
+        STATIC_ METALLIC_PAINT;
+        STATIC_ MATTE_TEXTURED;
+        STATIC_ OBJ;
+        STATIC_ VELVET;
+#undef STATIC_
         
         Materials(){}
         virtual ~Materials(){}
@@ -49,51 +49,26 @@ namespace ofxEmbree {
         void setProp(string name, string pname, ofVec2f p);
         void setProp(string name, string pname, ofVec3f p);
         void setProp(string name, string pname, ofVec4f p);
-        void setProp(string name, string pname, ofColor p);
+        void setProp(string name, string pname, ofFloatColor p);
         
         void update(string name);
         
         Device::RTMaterial get(string name);
         
-        // some default / standard materials
+        /* some default / standard materials */
+        
         Device::RTMaterial white();
         Device::RTMaterial gold();
         Device::RTMaterial glass();
-        Device::RTMaterial mettalicPaint(ofColor color, bool bCache=false);
+        Device::RTMaterial mirror();
+        // the next ones get cached based on color so it can fill up the memory quite quickly if continuously generated
+        // however if you disable the cache you have to retain the instance with a Handle<>
+        Device::RTMaterial matte(ofFloatColor color, bool bCache=true);
+        Device::RTMaterial mettalicPaint(ofFloatColor color, bool bCache=true);
+        Device::RTMaterial velvet(ofFloatColor color, bool bCache=true);
+        Device::RTMaterial plastic(ofFloatColor color, bool bCache=true);
         
         const map<string, Handle <Device::RTMaterial> > & getMap() { return materialMap; }
-        
-        /*
-         //glass && Dielectric
-         ofColor transmission;
-         float etaOutside;
-         float etaInside;
-         
-         ofColor transmissionOutside;
-         
-         // MetallicPaint
-         float eta;
-         ofColor shadeColor;
-         ofColor glitterColor;
-         float glitterSpread;
-         
-         // Metal
-         ofPoint k;
-         float roughness;
-         
-         // MatteTextured
-         string Kd;
-         float s0[2];
-         float ds[2];
-         
-         // Matte
-         ofPoint reflectance;
-         
-         // Velvet
-         float backScattering;
-         ofPoint horizonScatteringColor;
-         float horizonScatteringFallOff;
-         */
         
     protected:
         

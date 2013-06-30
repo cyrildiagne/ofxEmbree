@@ -72,8 +72,11 @@ namespace ofxEmbree {
     }
 
     void Camera::setTarget(ofNode& target_) {
-        
         target = &target_;
+    }
+    
+    ofNode& Camera::getTarget() {
+        return *target;
     }
     
     ofPoint Camera::getTargetPos() {
