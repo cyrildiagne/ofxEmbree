@@ -82,7 +82,6 @@ void testApp::draw(){
 	
     string text;
     text = "Press ' ' to toggle render mode\n";
-    text += "Press 's' to add a random sphere\n";
     text += "Press 'f' to toggle fullscreen";
     
     if(!bEmbreeRender) {

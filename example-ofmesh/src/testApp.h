@@ -6,6 +6,8 @@
 typedef map<Device::RTShape, ofSpherePrimitive*> SphereMap;
 typedef map<Device::RTShape, of3dPrimitive*> MeshMap;
 
+using namespace ofxEmbree;
+
 class testApp : public ofBaseApp{
 
 public:
@@ -26,9 +28,9 @@ public:
     
 private:
     
-    ofxEmbree::Renderer renderer;
-    ofxEmbree::Camera cam;
-    ofxEmbree::Materials materials;
+    Renderer renderer;
+    Camera cam;
+    Materials materials;
     
     SphereMap spheresMap;
     MeshMap meshMap;

@@ -32,7 +32,7 @@ void testApp::setup(){
 void testApp::addSphere(ofPoint pos, float radius){
     
     string matName = "random_"+ ofToString( materials.getMap().size() );
-    materials.add(matName, "MetallicPaint");
+    materials.add(matName, Materials::METALLIC_PAINT);
     materials.setProp(matName, "eta", 1.45f);
     materials.setProp(matName, "glitterColor", ofColor(0.5, 0.44, 0.42));
     materials.setProp(matName, "glitterSpread", 0.01f);
