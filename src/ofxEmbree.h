@@ -32,11 +32,11 @@
 
 namespace ofxEmbree {
     
-    static embree::Vec3f toEmbree(ofPoint pt) {
+    inline embree::Vec3f toEmbree(ofPoint pt) {
         return embree::Vec3f(pt.x, pt.y, pt.z);
     }
     
-    static embree::Col3f toEmbree(ofColor col) {
+    inline embree::Col3f toEmbree(ofColor col) {
         return embree::Col3f(col.r, col.g, col.b);
     }
 }
