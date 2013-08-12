@@ -184,12 +184,12 @@ namespace ofxEmbree {
         return addShape(material, sphere);
     }
 
-    Handle <Device::RTShape> Renderer::addMesh(Device::RTMaterial material, ofMesh & meshPr){
+    Handle <Device::RTShape> Renderer::addMesh(Device::RTMaterial material, const ofMesh & meshPr){
         
         return addMesh(material, meshPr, identity);
     }
     
-    Handle <Device::RTShape> Renderer::addMesh(Device::RTMaterial material, ofMesh & meshPr, const ofMatrix4x4& transform){
+    Handle <Device::RTShape> Renderer::addMesh(Device::RTMaterial material, const ofMesh & meshPr, const ofMatrix4x4& transform){
         
         int vertsNum = meshPr.getNumVertices();
         int vertsSize = vertsNum * sizeof(ofVec3f);
@@ -233,23 +233,41 @@ namespace ofxEmbree {
     }
     
     Handle <Device::RTShape> Renderer::addShape(Device::RTMaterial material, Device::RTShape shape, const ofMatrix4x4 & t){
-        
         AffineSpace3f space = AffineSpace3f( LinearSpace3f(t(0,0), t(1,0), t(2,0),
                                                            t(0,1), t(1,1), t(2,1),
                                                            t(0,2), t(1,2), t(2,2)),
                                              Vec3f(t(3,0), t(3,1), t(3,2)));
-        
         return addShape(material, shape, space);
     }
     
     Handle <Device::RTShape> Renderer::addShape(Device::RTMaterial material, Device::RTShape shape, const AffineSpace3f & transform){
-        
         Handle<Device::RTPrimitive> prim = g_device->rtNewShapePrimitive(shape, material, copyToArray(transform));
         prims.push_back(prim);
-        
+        primsMap[shape] = prim;
         buildScene();
-        
         return shape;
+    }
+    
+    void Renderer::removeShapes(vector< Handle<Device::RTShape> >& shapes){
+        for (int i=0; i<shapes.size(); i++) {
+            removeShape(shapes[i]);
+        }
+    }
+    
+    void Renderer::removeShape(Device::RTShape shape){
+        vector< Handle<Device::RTPrimitive> >::iterator it;
+        Device::__RTPrimitive * a, * b;
+        for (it=prims.begin(); it!=prims.end(); ++it) {
+            a = (Device::__RTPrimitive*)(*it);
+            b = (Device::__RTPrimitive*)primsMap[shape];
+            ofLog() << a << " " << b << " " << ( a == b );
+        }
+        
+    }
+    
+    void Renderer::clearScene(bool bRebuild){
+        prims.erase(prims.begin(), prims.end());
+        if(bRebuild) buildScene();
     }
     
     

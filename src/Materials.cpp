@@ -54,6 +54,8 @@ namespace ofxEmbree {
         g_device->rtCommit(materialMap[name]);
     }
     
+    #pragma mark - Properties setters
+    
     void Materials::setProp(string name, string pname, int p){
         if(!materialMap.count(name)){
             ofLog() << "ofxEmbree ERROR - material " << name << " not found";

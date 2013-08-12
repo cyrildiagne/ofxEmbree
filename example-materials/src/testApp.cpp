@@ -14,7 +14,7 @@ void testApp::setup(){
     cam.setLongitude(0);
     
 	renderer.setup(cam);
-	renderer.setRecursionDepth(10);
+	renderer.setRecursionDepth(20);
     renderer.addQuadLight(ofPoint(-750, 600, -750), ofPoint(1500, 0, 0), ofPoint(0, 0, 1500), ofColor(2.0, 2.0, 2.0));
     
     addGround();

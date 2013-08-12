@@ -62,7 +62,7 @@ namespace ofxEmbree {
         Device::RTMaterial glass();
         Device::RTMaterial mirror();
         // the next ones get cached based on color so it can fill up the memory quite quickly if continuously generated
-        // however if you disable the cache you have to retain the instance with a Handle<>
+        // however if you disable the cache you have to retain the instance yourself with a Handle<>
         Device::RTMaterial matte(ofFloatColor color, bool bCache=true);
         Device::RTMaterial mettalicPaint(ofFloatColor color, bool bCache=true);
         Device::RTMaterial velvet(ofFloatColor color, bool bCache=true);

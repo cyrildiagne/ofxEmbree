@@ -48,11 +48,16 @@ namespace ofxEmbree {
         
         Handle<Device::RTShape> addSphere(Device::RTMaterial material, ofSpherePrimitive& sphere);
         Handle<Device::RTShape> addSphere(Device::RTMaterial material, ofPoint pos, float radius, int numTheta=50, int numPhi=50);
-        Handle<Device::RTShape> addMesh(Device::RTMaterial material, ofMesh & mesh);
-        Handle<Device::RTShape> addMesh(Device::RTMaterial material, ofMesh & mesh, const ofMatrix4x4& transform);
+        Handle<Device::RTShape> addMesh(Device::RTMaterial material, const ofMesh & mesh);
+        Handle<Device::RTShape> addMesh(Device::RTMaterial material, const ofMesh & mesh, const ofMatrix4x4& transform);
         Handle<Device::RTShape> addShape(Device::RTMaterial material, Device::RTShape shape);
         Handle<Device::RTShape> addShape(Device::RTMaterial material, Device::RTShape shape, const ofMatrix4x4& transform);
         Handle<Device::RTShape> addShape(Device::RTMaterial material, Device::RTShape shape, const AffineSpace3f& transform);
+        
+        
+        void removeShape(Device::RTShape shape);
+        void removeShapes(vector< Handle<Device::RTShape> >& shapes);
+        void clearScene(bool bRebuild=true);
         
         void setSize(int width, int height);
         void setSamplePerPixel(int spp);
@@ -111,6 +116,8 @@ namespace ofxEmbree {
         Handle<Device::RTImage> backplate;
         Handle<Device::RTScene> render_scene;
         vector<Handle<Device::RTPrimitive> > prims;
+        
+        map<Device::RTShape, Handle<Device::RTPrimitive> > primsMap;
         
         ofMatrix4x4 identity;
     };
